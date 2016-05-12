@@ -56,4 +56,11 @@ if __name__ == "__main__":
     data = pd.DataFrame.from_dict(raw_filings)
     for field in ('contributiontype', 'honoree', 'id', 'contributor', 'type'):
         data[field] = data[field].astype('category')
-
+    print("\nSample result:")
+    print(
+        data[data['contributiontype'] == 'FECA'][['honoree', 'amount']] \
+            .groupby('honoree') \
+            .aggregate(np.sum) \
+            .query('amount > 10') \
+            .sort('amount')
+    )
