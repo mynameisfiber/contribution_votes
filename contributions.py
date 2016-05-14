@@ -14,13 +14,14 @@ from dateutil.parser import parse as DateParser
 import os
 
 
+DATADIR = "/data/datasets/politics/lobby/contributions"
 FIELD_SPECS={
     'year': int,
     'amount': float,
     'registrantid': int,
     'clientid': int,
     'received': DateParser,
-    'ContributionDate': DateParser,
+    'contributiondate': DateParser,
 }
 
 
@@ -30,9 +31,11 @@ def _dict_lower_keys(d):
 
 def parse_contribution_filing(fd):
     dom = ET.fromstring(fd.read())
+    data = {}
     for filing in tqdm(dom.findall('.//Filing')):
         for child in filing.findall('.//Contribution'):
-            data = _dict_lower_keys(filing.attrib)
+            data.clear()
+            data.update(_dict_lower_keys(filing.attrib))
             data.update(_dict_lower_keys(child.attrib))
             for key, cast in FIELD_SPECS.items():
                 try:
@@ -46,21 +49,25 @@ def read_contribution_filings(datadir):
     for filename in tqdm(os.listdir(datadir)):
         if filename.endswith('.xml'):
             abspath = os.path.join(datadir, filename)
-            filedata = parse_contribution_filing(open(abspath))
+            with open(abspath) as fd:
+                filedata = parse_contribution_filing(fd)
             yield from filedata
 
 
-if __name__ == "__main__":
-    datadir="/data/datasets/politics/lobby/contributions"
+def contribution_filings(datadir=DATADIR):
     raw_filings = read_contribution_filings(datadir)
     data = pd.DataFrame.from_dict(raw_filings)
-    for field in ('contributiontype', 'honoree', 'id', 'contributor', 'type'):
+    for field in ('contributiontype', 'honoree', 'id', 'contributor', 'type',
+                  'payee', 'period'):
         data[field] = data[field].astype('category')
+    return data
+
+
+if __name__ == "__main__":
+    data = contribution_filings()
     print("\nSample result:")
-    print(
-        data[data['contributiontype'] == 'FECA'][['honoree', 'amount']] \
+    print(data[data['contributiontype'] == 'FECA'][['honoree', 'amount']] \
             .groupby('honoree') \
             .aggregate(np.sum) \
             .query('amount > 10') \
-            .sort('amount')
-    )
+            .sort('amount'))
