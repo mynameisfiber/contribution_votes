@@ -45,17 +45,19 @@ def parse_contribution_filing(fd):
             yield data
 
 
-def read_contribution_filings(datadir):
+def read_contribution_filings(datadir, start_year=None):
     for filename in tqdm(os.listdir(datadir)):
         if filename.endswith('.xml'):
-            abspath = os.path.join(datadir, filename)
-            with open(abspath) as fd:
-                filedata = parse_contribution_filing(fd)
-            yield from filedata
+            year = int(filename.split('_')[0])
+            if start_year and year >= start_year:
+                abspath = os.path.join(datadir, filename)
+                with open(abspath) as fd:
+                    filedata = parse_contribution_filing(fd)
+                    yield from filedata
 
 
-def contribution_filings(datadir=DATADIR):
-    raw_filings = read_contribution_filings(datadir)
+def contribution_filings(datadir=DATADIR, start_year=None):
+    raw_filings = read_contribution_filings(datadir, start_year)
     data = pd.DataFrame.from_dict(raw_filings)
     for field in ('contributiontype', 'honoree', 'id', 'contributor', 'type',
                   'payee', 'period'):

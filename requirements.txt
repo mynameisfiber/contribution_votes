@@ -2,3 +2,5 @@ tqdm
 pandas
 numpy
 python-dateutil
+fuzzywuzzy
+python-Levenshtein
