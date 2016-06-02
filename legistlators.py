@@ -11,7 +11,7 @@ from tqdm import tqdm
 import os
 
 
-DATADIR = '/data/datasets/politics/congress/congress-legislators/'
+DATADIR = './data/congress-legislators/'
 
 
 def parse_legislators(data, start_year=None):

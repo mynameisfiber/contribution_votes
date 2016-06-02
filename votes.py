@@ -12,7 +12,7 @@ from dateutil.parser import parse as DateParser
 import os
 
 
-DATADIR = '/data/datasets/politics/congress/'
+DATADIR = './data/votes/'
 VOTE_TYPES = {
     "Yea": True,
     "Aye": True,

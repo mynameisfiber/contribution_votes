@@ -14,7 +14,7 @@ from dateutil.parser import parse as DateParser
 import os
 
 
-DATADIR = "/data/datasets/politics/lobby/contributions"
+DATADIR = "./data/contributions"
 FIELD_SPECS={
     'year': int,
     'amount': float,

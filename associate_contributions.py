@@ -16,8 +16,7 @@ def associate_names(people_finder):
     return _
 
 
-if __name__ == "__main__":
-    start_year = 2016
+def associated_contributions(start_year):
     contrib_df = contributions.contribution_filings(start_year=start_year)
     contrib_df = contrib_df[contrib_df['honoree'] != 'N/A']
     earliest_year = contrib_df['received'].min().year
@@ -29,3 +28,8 @@ if __name__ == "__main__":
     contrib_df['id_honoree'] = (contrib_df['honoree']
         .apply(associate_names(people_finder))
         .astype('category'))
+    return contrib_df
+
+
+if __name__ == "__main__":
+    contrib_df = associated_contributions(2016)
