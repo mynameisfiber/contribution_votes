@@ -3,19 +3,16 @@
 First you have to download all the data,
 
 ```
-$ git submodule update --init --recursive
-$ cd data/contributions
 $ ./getdata.sh
-$ cd ../votes/
-$ ./getdata.sh
-$ cd ../..
 ```
 
-Next, start using!  The main file to be using is `associate_contributions.py`.
-It will load up all the contribution and votes data and join them together.
-Right now it limits itself to only votes that have happened in 2016 so that the
-load time is quick, but this can be changed by modifying the `start_year`
-parameter.
+And then go grab a coffee... and then probably lunch.
+
+Now you're ready to start playing with data!  The main file to be using is
+`associate_contributions.py`.  It will load up all the contribution and votes
+data and join them together.  Right now it limits itself to only votes that have
+happened in 2016 so that the load time is quick, but this can be changed by
+modifying the `start_year` parameter.
 
 
 ## Exploration Into Political Contributions
